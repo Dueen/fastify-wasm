@@ -1,6 +1,6 @@
 # fastify-wasm
 
-[![CI](https://github.com/dueen/fastify-wasm/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/your-org/fastify-wasm/actions/workflows/ci.yml)
+[![CI](https://github.com/dueen/fastify-wasm/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dueen/fastify-wasm/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/fastify-wasm.svg?style=flat)](https://www.npmjs.com/package/fastify-wasm)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
@@ -19,18 +19,18 @@ This plugin enables you to load and execute WebAssembly modules within a Fastify
 ```js
 "use strict";
 
-const path = require("node:path");
-const fastifyWasm = require("fastify-wasm");
-const fastify = require("fastify")({ logger: { level: "trace" } });
+const fastify = require("fastify")
+const fastifyWasm = require("fastify-wasm")
 
-fastify
-  .register(fastifyWasm, {
-    // An absolute path to the wasm file
-    root: path.join(__dirname, "hello.wasm"),
-  })
-  .listen({ port: 3000 }, (err) => {
-    if (err) throw err;
-  });
+const app = fastify()
+
+app.register(fastifyWasm, {
+  path: 'path/to/your/wasm',
+})
+
+app.listen({ port: 3000 }, (err) => {
+  if (err) throw err;
+});
 ```
 
 ### TypeScript
@@ -40,12 +40,11 @@ This plugin includes TypeScript definitions for better type safety and improved 
 ```ts
 import fastify from "fastify";
 import fastifyWasm from "fastify-wasm";
-import path from "node:path";
 
 const app = fastify();
 
 app.register(fastifyWasm, {
-  root: path.join(__dirname, "hello.wasm"),
+  path: 'path/to/your/wasm',
 });
 
 app.listen({ port: 3000 }, (err) => {
