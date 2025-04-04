@@ -1,7 +1,9 @@
 'use strict'
 
-module.exports = require('neostandard')({
-  ignores: require('neostandard').resolveIgnoresFromGitignore(),
+const neostandard = require('neostandard')
+
+module.exports = neostandard({
+  ignores: neostandard.resolveIgnoresFromGitignore(),
   noJsx: true,
   ts: true,
 })
