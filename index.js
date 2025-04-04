@@ -1,34 +1,33 @@
-// @ts-check
 'use strict'
 
+const { createReadStream } = require('node:fs')
+const { Readable } = require('node:stream')
 const fp = require('fastify-plugin')
-const { readFile } = require('node:fs/promises')
 
 async function fastifyWasm (fastify, options) {
   // Validate options
   if (!options || typeof options !== 'object') {
-    throw new Error('Options must be provided as an object')
-  }
-  if (!options.path || typeof options.path !== 'string') {
-    throw new Error('The "path" option is required and must be a string')
+    throw new Error('options must be provided as an object')
   }
 
-  options.env = options.env || {}
-  options.exports = options.exports || []
+  if (!options.path) {
+    throw new Error('options.path must be provided')
+  }
 
-  const wasmBuffer = await readFile(options.path)
-  const wasm = await WebAssembly.instantiate(wasmBuffer, {
-    env: options.env,
-  })
+  const isString = typeof options.path === 'string'
+  const isBuffer = Buffer.isBuffer(options.path)
+  const isURL = URL.canParse(options.path)
+  const isValidPath = isString || isBuffer || isURL
 
-  // decorate fastify with the wasm exports (options.exports)
-  const decorated = options.exports.reduce((acc, exportName) => {
-    acc[exportName] = wasm.instance.exports[exportName]
-    return acc
-  }, {})
-  decorated.memory = wasm.instance.exports.memory
+  if (isValidPath === false) {
+    throw new Error('options.path must be a valid path')
+  }
 
-  fastify.decorate('wasm', decorated)
+  const webStream = Readable.toWeb(createReadStream(options.path))
+  const response = new Response(webStream, { headers: { 'Content-Type': 'application/wasm' } })
+  const wasm = await WebAssembly.instantiateStreaming(response, options.imports)
+
+  fastify.decorate('wasm', wasm)
 }
 
 module.exports = fp(fastifyWasm, {
