@@ -24,5 +24,6 @@ jobs:
       pull-requests: write
     uses: fastify/workflows/.github/workflows/plugins-ci.yml@v5
     with:
-      license-check: true
       lint: true
+      license-check: true
+      fastify-dependency-integration: true
