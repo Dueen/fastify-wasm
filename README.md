@@ -37,16 +37,27 @@ app.listen({ port: 3000 }, (err) => {
 ### TypeScript
 
 This plugin includes TypeScript definitions for better type safety and improved developer experience.
+Exports from the WebAssembly module can be typed on the `FastifyWasmExports` interface.
 
 ```ts
 import fastify from "fastify";
 import fastifyWasm from "fastify-wasm";
+
+interface FastifyWasmExports {
+  add(lhs: number, rhs: number): number
+}
 
 const app = fastify();
 
 app.register(fastifyWasm, {
   path: 'path/to/your/wasm',
 });
+
+app.get('/', (_req, reply) => {
+  // Call the exported function `add` from the wasm module
+  const { add } = fastify.wasm.instance.exports
+  reply.send({ result: add(2, 2) })
+})
 
 app.listen({ port: 3000 }, (err) => {
   if (err) throw err;
