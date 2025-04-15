@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/dueen/fastify-wasm/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dueen/fastify-wasm/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/fastify-wasm.svg?style=flat)](https://www.npmjs.com/package/fastify-wasm)
+[![License](https://img.shields.io/npm/l/@jsdevtools/npm-publish.svg)](LICENSE)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
 A Fastify plugin for loading and executing WebAssembly modules.
